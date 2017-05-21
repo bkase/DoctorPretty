@@ -4,7 +4,7 @@
     {
       "package": "Algebra",
       "reason": null,
-      "repositoryURL": "https://github.com/bkase/Algebra.git",
+      "repositoryURL": "https://github.com/typelift/Algebra.git",
       "version": "0.2.0"
     },
     {
@@ -12,6 +12,12 @@
       "reason": null,
       "repositoryURL": "https://github.com/typelift/Operadics.git",
       "version": "0.2.3"
+    },
+    {
+      "package": "SwiftCheck",
+      "reason": null,
+      "repositoryURL": "https://github.com/typelift/SwiftCheck.git",
+      "version": "0.8.0"
     },
     {
       "package": "Swiftx",

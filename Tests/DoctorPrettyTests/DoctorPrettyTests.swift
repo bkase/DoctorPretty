@@ -78,6 +78,6 @@ class DoctorPrettyTests: XCTestCase {
     }
     
     static var allTests = [
-        ("testExample", testExample),
+        ("testSimpleConstructors", testSimpleConstructors),
     ]
 }
