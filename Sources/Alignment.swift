@@ -24,7 +24,8 @@ extension Doc {
     /// Align this document with the nesting level set to the current column
     func align() -> Doc {
         return .column { k in
-            .nesting { i in .nest(k - i, self) }
+            print("col", k)
+            return .nesting { i in print("nest", i); return .nest(k - i, self) }
         }
     }
 }

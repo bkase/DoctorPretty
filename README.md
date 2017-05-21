@@ -6,7 +6,7 @@ A Swift implementation of the [A prettier printer (Wadler 2003)](https://homepag
 
 ## WIP do not use yet
 
-The implementation is currently broken and does not have tests yet.
+The implementation does not have larger stress tests yet.
 
 Please feel free to contribute though!
 

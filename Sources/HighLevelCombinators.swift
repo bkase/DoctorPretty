@@ -101,6 +101,11 @@ extension Doc {
     }
     
     static func fold<S: Sequence>(docs: S, combine: (Doc, Doc) -> Doc) -> Doc where S.Iterator.Element == Doc {
-        return docs.reduce(Doc.zero, <>)
+        var iter = docs.makeIterator()
+        if let first = iter.next() {
+           return IteratorSequence(iter).reduce(first, combine)
+        } else {
+            return Doc.zero
+        }
     }
 }
