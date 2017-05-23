@@ -13,7 +13,7 @@ let package = Package(
     targets: [],
     dependencies: [
         .Package(url: "https://github.com/typelift/Algebra.git", majorVersion: 0, minor: 2),
-        .Package(url: "https://github.com/bkase/Swiftx.git", majorVersion: 0, minor: 5)
+        .Package(url: "https://github.com/typelift/Swiftx.git", majorVersion: 0, minor: 5)
     ] + (isSwiftPMTest ?
       [.Package(url: "https://github.com/typelift/SwiftCheck.git", versions: Version(0,6,0)..<Version(1,0,0))] :
       [])
