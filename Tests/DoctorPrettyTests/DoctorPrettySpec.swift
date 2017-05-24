@@ -37,9 +37,9 @@ extension Doc: Arbitrary {
 class DocSpecs: XCTestCase {
     func testSpecs() {
         let posNum = Int.arbitrary.suchThat{ $0 > 0 }
-		property("text append is concat") <- forAll(posNum, String.arbitrary, String.arbitrary) { (width: Int, s1: String, s2: String) in
-		    return Doc.text(s1 + s2).equals(underPageWidth: width, doc: .text(s1) <> .text(s2))
-		}
+        property("text is a monoid homomorphism") <- forAll(posNum, String.arbitrary, String.arbitrary) { (width: Int, s1: String, s2: String) in
+            return Doc.text(s1 + s2).equals(underPageWidth: width, doc: .text(s1) <> .text(s2))
+        }
 
         property("nesting law") <- forAll(posNum, posNum, posNum, Doc.arbitrary) { (x: Int, y: Int, z: Int, doc: Doc) in
             let xs = [x, y, z].sorted()
@@ -72,6 +72,10 @@ class DocSpecs: XCTestCase {
             return Doc.nest(nest, .text(noNewlines))
                 .equals(underPageWidth: width,
                         doc: .text(noNewlines))
+        }
+
+        property("group idempotent") <- forAll(Doc.arbitrary) { (doc: Doc) in
+            return doc.grouped == doc.grouped.grouped
         }
     }
 }
