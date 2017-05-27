@@ -77,7 +77,26 @@ class DoctorPrettyTests: XCTestCase {
         )
     }
     
+    // WIP
+    /*func testSwiftExample() {
+        func fun(name: String, args: [(String, Doc)]) -> Doc {
+            let funHead = .text(name) <> Doc.lparen
+            let args = args.map{ (name, doc) in
+                (.text(name) <> .text(":")) <%> doc
+            }
+        }
+        assertPretty(pageWidth: 80, str: "", doc: Doc.zero)
+
+    }*/
+
     static var allTests = [
         ("testSimpleConstructors", testSimpleConstructors),
+        ("testFlatAltConstructor", testFlatAltConstructor),
+        ("testCat", testCat),
+        ("testNest", testNest),
+        ("testUnion", testUnion),
+        ("testFuncConstructors", testFuncConstructors),
+        ("testHang", testHang),
+        ("testAlign", testAlign)
     ]
 }

@@ -3,4 +3,5 @@ import XCTest
 
 XCTMain([
     testCase(DoctorPrettyTests.allTests),
+    testCase(DocSpecs.allTests)
 ])

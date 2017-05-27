@@ -78,4 +78,8 @@ class DocSpecs: XCTestCase {
             return doc.grouped == doc.grouped.grouped
         }
     }
+
+    static var allTests = [
+        ("testSpecs", testSpecs)
+    ]
 }
