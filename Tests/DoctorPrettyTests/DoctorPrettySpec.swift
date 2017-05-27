@@ -74,8 +74,10 @@ class DocSpecs: XCTestCase {
                         doc: .text(noNewlines))
         }
 
-        property("group idempotent") <- forAll(Doc.arbitrary) { (doc: Doc) in
-            return doc.grouped == doc.grouped.grouped
+        property("group idempotent") <- forAll(posNum, Doc.arbitrary) { (width: Int, doc: Doc) in
+            return doc.grouped
+                .equals(underPageWidth: width,
+	                    doc: doc.grouped.grouped)
         }
     }
 
