@@ -1,5 +1,7 @@
 ## Doctor Pretty
 
+[![Build Status](https://travis-ci.org/bkase/DoctorPretty.svg?branch=master)](https://travis-ci.org/bkase/DoctorPretty)
+
 A Swift implementation of the [A prettier printer (Wadler 2003)](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf) paper (including generally accepted modern enhancements ala [wl-pprint-annotated](https://github.com/minad/wl-pprint-annotated/blob/master/src/Text/PrettyPrint/Annotated/WL.hs).
 
 ---
