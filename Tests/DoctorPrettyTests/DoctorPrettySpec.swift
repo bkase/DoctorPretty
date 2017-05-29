@@ -30,7 +30,7 @@ extension Doc: Arbitrary {
 		        (3, stringDocGen),
 		        (1, lineOrEmptyGen)
 		    ]).proliferate(withSize: 10)
-              .map{ ds in Doc.cat(ds) }
+	          .map{ $0.cat() }
     }
 }
 

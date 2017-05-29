@@ -17,3 +17,4 @@ extension Doc: Additive {
     
     static var zero: Doc { return .empty }
 }
+
