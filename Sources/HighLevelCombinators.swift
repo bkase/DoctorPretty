@@ -44,66 +44,66 @@ extension Doc {
         return Doc.linebreak.grouped
     }
     
-    /// Puts a line between x and y that can be flattened
+    /// Puts a line between x and y that can be flattened to a space
     static func <&>(x: Doc, y: Doc) -> Doc {
         return x <> .line <> y
     }
     
-    /// Puts a line between x and y undconditionally
+    /// Puts a line between x and y that can be flattened with no space
     static func <&&>(x: Doc, y: Doc) -> Doc {
         return x <> .linebreak <> y
     }
 }
 
-extension Doc {
+extension Sequence where Iterator.Element == Doc {
     /// Concat all horizontally if it fits, but if not
     /// all vertical
-    static func sep<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return vsep(docs).grouped
+    func sep() -> Doc {
+        return vsep().grouped
     }
     
     /// Concats all horizontally until end of page
     /// then puts a line and repeats
-    static func fillSep<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return fold(docs: docs, combine: <%>)
+    func fillSep() -> Doc {
+        return fold(combineDocs: <%>)
     }
     
     /// Concats all horizontally with spaces in between
-    static func hsep<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return fold(docs: docs, combine: <+>)
+    func hsep() -> Doc {
+        return fold(combineDocs: <+>)
     }
     
     /// Concats all vertically, if a group undoes, concat with space
-    static func vsep<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return fold(docs: docs, combine: <&>)
+    func vsep() -> Doc {
+        return fold(combineDocs: <&>)
     }
     
     /// Concats all horizontally no spaces if fits
     /// Otherwise all vertically
-    static func cat<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return vcat(docs).grouped
+    func cat() -> Doc {
+        return vcat().grouped
     }
     
     /// Concats all horizontally until end of page
     /// then puts a linebreak and repeats
-    static func fillCat<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return fold(docs: docs, combine: <%%>)
+    func fillCat() -> Doc {
+        return fold(combineDocs: <%%>)
     }
     
     /// Concats all horizontally with no spaces
-    static func hcat<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return fold(docs: docs, combine: <>)
+    func hcat() -> Doc {
+        return fold(combineDocs: <>)
     }
     
     /// Concats all vertically, if a group undoes, concat with no space
-    static func vcat<S: Sequence>(_ docs: S) -> Doc where S.Iterator.Element == Doc {
-        return fold(docs: docs, combine: <&&>)
+    func vcat() -> Doc {
+        return fold(combineDocs: <&&>)
     }
     
-    static func fold<S: Sequence>(docs: S, combine: (Doc, Doc) -> Doc) -> Doc where S.Iterator.Element == Doc {
-        var iter = docs.makeIterator()
+    func fold(combineDocs: (Doc, Doc) -> Doc) -> Doc {
+        var iter = makeIterator()
         if let first = iter.next() {
-           return IteratorSequence(iter).reduce(first, combine)
+           return IteratorSequence(iter).reduce(first, combineDocs)
         } else {
             return Doc.zero
         }

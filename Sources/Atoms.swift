@@ -53,6 +53,7 @@ extension Doc {
     static let space: Doc = .char(" ")
     static let dot: Doc = .char(".")
     static let comma: Doc = .char(",")
+    static let semi: Doc = .char(";")
     static let backslash: Doc = .char("\\")
     static let equals: Doc = .char("=")
 }
