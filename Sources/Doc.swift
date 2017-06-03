@@ -21,7 +21,7 @@ indirect enum Doc {
     /// Renders Doc with an increased indent level
     /// Note: This only affects line after the first newline
     case nest(IndentLevel, Doc)
-    /// Invariant: longerLines.count >= shorterLines.split('\n').first.count
+    /// Invariant: longerLines.firstLine.count >= shorterLines.firstLine.count
     case union(longerLines: Doc, shorterLines: Doc) 
     // No support for Annotations for now, I don't think Swift's generics would take kindly to a Doc<A>
     // case annotate(A, Doc)
