@@ -26,11 +26,11 @@ indirect enum List<T> {
 typealias Docs = List<(Int, Doc)>
 
 extension Doc {
-    func renderPrettyDefault() -> SimpleDoc {
+    public func renderPrettyDefault() -> SimpleDoc {
         return renderPretty(ribbonFrac: 0.4, pageWidth: 100)
     }
     
-    func renderPretty(ribbonFrac: Float, pageWidth: Width) -> SimpleDoc {
+    public func renderPretty(ribbonFrac: Float, pageWidth: Width) -> SimpleDoc {
         return renderFits(compareStrategy: Doc.nicest1, ribbonFrac: ribbonFrac, pageWidth: pageWidth)
     }
     

@@ -160,7 +160,7 @@ With Swift Package Manager, put this inside your `Package.swift`:
 
 ```swift
 .Package(url: "https://github.com/bkase/DoctorPretty.git",
-         majorVersion: 0, minor: 2)
+         majorVersion: 0, minor: 3)
 ```
 
 ## How does it work?

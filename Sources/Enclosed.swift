@@ -12,10 +12,11 @@ import Operadics
 extension BidirectionalCollection where Iterator.Element == Doc, IndexDistance == Int, SubSequence.Iterator.Element == Doc {
     
     /// Intersperses punctuation inside docs
-    func punctuate(with punctuation: Doc) -> [Doc] {
+    public func punctuate(with punctuation: Doc) -> [Doc] {
         if let d = first {
-            return [d] + self.dropFirst().reduce([]) { acc, d2 in
-                acc <> [punctuation, d2]
+            return [d] + self.dropFirst().reduce([Doc]()) { t in
+                let (acc, d2) = t
+                return acc <> [punctuation, d2]
             }
         } else {
             return []
@@ -35,7 +36,7 @@ extension BidirectionalCollection where Iterator.Element == Doc, IndexDistance =
     ///         baz
     ///     ]
     /// Note: The Haskell version sticks the separator at the front
-    func enclose(left: Doc, right: Doc, separator: Doc, indent: IndentLevel) -> Doc {
+    public func enclose(left: Doc, right: Doc, separator: Doc, indent: IndentLevel) -> Doc {
         if count == 0 {
             return left <> right
         }
@@ -51,17 +52,17 @@ extension BidirectionalCollection where Iterator.Element == Doc, IndexDistance =
     }
     
     /// See @enclose
-    func list(indent: IndentLevel) -> Doc {
+    public func list(indent: IndentLevel) -> Doc {
         return enclose(left: Doc.lbracket, right: Doc.rbracket, separator: Doc.comma, indent: indent)
     }
     
     /// See @enclose
-    func tupled(indent: IndentLevel) -> Doc {
+    public func tupled(indent: IndentLevel) -> Doc {
         return enclose(left: Doc.lparen, right: Doc.rparen, separator: Doc.comma, indent: indent)
     }
     
     /// See @enclose
-    func semiBraces(indent: IndentLevel) -> Doc {
+    public func semiBraces(indent: IndentLevel) -> Doc {
         return enclose(left: Doc.lbrace, right: Doc.rbrace, separator: Doc.semi, indent: indent)
     }
 }
