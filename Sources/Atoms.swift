@@ -11,49 +11,49 @@ import Operadics
 
 extension Doc {
     /// Enclose a doc between left and right
-    func enclose(left: Doc, right: Doc) -> Doc {
+    public func enclose(left: Doc, right: Doc) -> Doc {
         return left <> self <> right
     }
     
-    var squotes: Doc {
+    public var squotes: Doc {
         return enclose(left: .squote, right: .squote)
     }
     
-    var dquotes: Doc {
+    public var dquotes: Doc {
         return enclose(left: .dquote, right: .dquote)
     }
     
-    var braces: Doc {
+    public var braces: Doc {
         return enclose(left: .lbrace, right: .rbrace)
     }
     
-    var parens: Doc {
+    public var parens: Doc {
         return enclose(left: .lparen, right: .rparen)
     }
     
-    var angles: Doc {
+    public var angles: Doc {
         return enclose(left: .langle, right: .rangle)
     }
     
-    var brackets: Doc {
+    public var brackets: Doc {
         return enclose(left: .lbracket, right: .rbracket)
     }
     
-    static let squote: Doc = .char("'")
-    static let dquote: Doc = .char("\"")
-    static let lbrace: Doc = .char("{")
-    static let rbrace: Doc = .char("}")
-    static let lparen: Doc = .char("(")
-    static let rparen: Doc = .char(")")
-    static let langle: Doc = .char("<")
-    static let rangle: Doc = .char(">")
-    static let lbracket: Doc = .char("[")
-    static let rbracket: Doc = .char("]")
+    public static let squote: Doc = .char("'")
+    public static let dquote: Doc = .char("\"")
+    public static let lbrace: Doc = .char("{")
+    public static let rbrace: Doc = .char("}")
+    public static let lparen: Doc = .char("(")
+    public static let rparen: Doc = .char(")")
+    public static let langle: Doc = .char("<")
+    public static let rangle: Doc = .char(">")
+    public static let lbracket: Doc = .char("[")
+    public static let rbracket: Doc = .char("]")
     
-    static let space: Doc = .char(" ")
-    static let dot: Doc = .char(".")
-    static let comma: Doc = .char(",")
-    static let semi: Doc = .char(";")
-    static let backslash: Doc = .char("\\")
-    static let equals: Doc = .char("=")
+    public static let space: Doc = .char(" ")
+    public static let dot: Doc = .char(".")
+    public static let comma: Doc = .char(",")
+    public static let semi: Doc = .char(";")
+    public static let backslash: Doc = .char("\\")
+    public static let equals: Doc = .char("=")
 }

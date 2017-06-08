@@ -11,10 +11,10 @@ import protocol Algebra.Additive
 import Operadics
 
 extension Doc: Additive {
-    static func <>(l: Doc, r: Doc) -> Doc {
+    public static func <>(l: Doc, r: Doc) -> Doc {
         return .concat(l, r)
     }
     
-    static var zero: Doc { return .empty }
+    public static var zero: Doc { return .empty }
 }
 

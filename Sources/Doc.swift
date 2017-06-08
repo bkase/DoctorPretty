@@ -1,14 +1,14 @@
 import Swiftx
 import Operadics
 
-typealias Width = Int
+public typealias Width = Int
 // TODO: What does this int mean, really
-typealias ColumnCount = Int
-typealias IndentLevel = Int
+public typealias ColumnCount = Int
+public typealias IndentLevel = Int
 /// The ribbon width is the maximal amount of non-indentation characters on a line
-typealias RibbonWidth = Int
+public typealias RibbonWidth = Int
 
-indirect enum Doc {
+public indirect enum Doc {
     case empty
     /// Invariant: char != '\n'
     case _char(Character)
@@ -30,34 +30,34 @@ indirect enum Doc {
     case columns((ColumnCount?) -> Doc)
     case ribbon((RibbonWidth?) -> Doc)
     
-    static func char(_ c: Character) -> Doc {
+    public static func char(_ c: Character) -> Doc {
         return c == "\n" ? ._line : ._char(c)
     }
     
-    static func text(_ str: String) -> Doc {
+    public static func text(_ str: String) -> Doc {
         return str == "" ? .empty : ._text(length: str.characters.count, str)
     }
     
-    static var line: Doc {
+    public static var line: Doc {
         return .flatAlt(primary: ._line, whenFlattened: .space)
     }
     
-    static var linebreak: Doc {
+    public static var linebreak: Doc {
         return .flatAlt(primary: ._line, whenFlattened: .zero)
     }
     
-    static var hardline: Doc {
+    public static var hardline: Doc {
         return ._line
     }
     
     /// Used to specify alternative layouts
     /// `doc.grouped` removes all line breaks in `doc`. The resulting line
     /// is added if it fits on the page. If it doesn't, it's rendered as is
-    var grouped: Doc {
+    public var grouped: Doc {
         return .union(longerLines: flattened, shorterLines: self)
     }
     
-    var flattened: Doc {
+    public var flattened: Doc {
         switch self {
         case .empty: return self
         case ._char(_): return self
