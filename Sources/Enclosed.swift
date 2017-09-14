@@ -9,7 +9,7 @@
 import Foundation
 import Operadics
 
-extension BidirectionalCollection where Iterator.Element == Doc, IndexDistance == Int, SubSequence.Iterator.Element == Doc {
+extension BidirectionalCollection where Iterator.Element == Doc, IndexDistance == Int {
     
     /// Intersperses punctuation inside docs
     public func punctuate(with punctuation: Doc) -> [Doc] {
