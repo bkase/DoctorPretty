@@ -4,8 +4,8 @@ import Operadics
 
 // Most tests ported from https://github.com/minad/wl-pprint-annotated/blob/master/test/WLPPrintTests.hs
 class DoctorPrettyTests: XCTestCase {
-    func assertPretty(pageWidth: Width, str: String, doc: Doc) {
-        XCTAssertEqual(doc.renderPretty(ribbonFrac: 1.0, pageWidth: pageWidth).displayString(), str)
+    func assertPretty(pageWidth: Width, str: String, doc: Doc, file: StaticString = #file, line: UInt = #line) {
+        XCTAssertEqual(doc.renderPretty(ribbonFrac: 1.0, pageWidth: pageWidth).displayString(), str, file: file, line: line)
     }
     
     func testSimpleConstructors() {
@@ -190,6 +190,28 @@ class DoctorPrettyTests: XCTestCase {
 "    )",
 "}"
             ].joined(separator: "\n"), doc: doc)
+    }
+
+    func testLargeDocument() {
+        let doc = (1...65)
+            .map { _ in "foo" }
+            .map(Doc.text)
+            .fillSep()
+
+        XCTAssertEqual(
+            """
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo foo foo foo foo foo foo foo
+            foo
+            """,
+            doc.renderPretty(ribbonFrac: 0.4, pageWidth: 80).displayString()
+        )
     }
 
     static var allTests = [

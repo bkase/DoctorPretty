@@ -37,7 +37,7 @@ extension Doc {
     func renderFits(compareStrategy: @escaping CompareStrategy, ribbonFrac: Float, pageWidth: Width) -> SimpleDoc {
         let rounded = round(Float(pageWidth) * ribbonFrac)
         let ribbonChars: RibbonWidth = max(0, min(pageWidth, Width(rounded)))
-        
+
         func best(
             currNesting: IndentLevel,
             currColumn: ColumnCount,
@@ -100,19 +100,35 @@ extension Doc {
     static func nicest1(nesting: IndentLevel, column: ColumnCount, pageWidth: Width, ribbonWidth: RibbonWidth) -> (SimpleDoc, () -> SimpleDoc) -> SimpleDoc {
         return { d1, d2 in
             let wid = min(pageWidth - column, ribbonWidth - column + nesting)
-            
+
             func fits(prefix: Int, w: Int, doc: SimpleDoc) -> Bool {
-                switch (prefix, w, doc) {
-                case let (_, w, _) where w < 0: return false
-                case (_, _, .empty): return true
-                case let (m, w, .char(_, x)):
-                    return fits(prefix: m, w: w-1, doc: x)
-                case let (m, w, .text(length, _, x)):
-                    return fits(prefix: m, w: w-length, doc: x)
-                case (_, _, .line(_, _)): return true
+                var _w = w
+                var _doc = doc
+
+                while true {
+                    switch (_w, _doc) {
+                    case (_, _) where _w < 0:
+                        return false
+
+                    case (_, .empty):
+                        return true
+
+                    case let (w, .char(_, x)):
+                        _w = w - 1
+                        _doc = x
+                        continue
+
+                    case let (w, .text(length, _, x)):
+                        _w = w - length
+                        _doc = x
+                        continue
+
+                    case (_, _):
+                        return true
+                    }
                 }
             }
-            
+
             if fits(prefix: min(nesting, column), w: wid, doc: d1) {
                 return d1
             } else {
