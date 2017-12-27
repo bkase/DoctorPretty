@@ -18,19 +18,19 @@ extension Doc {
     func equals(underPageWidth pageWidth: Width, doc: Doc) -> Bool {
         return
             self.renderPretty(ribbonFrac: 1.0, pageWidth: pageWidth).displayString() ==
-	        doc.renderPretty(ribbonFrac: 1.0, pageWidth: pageWidth).displayString()
+                doc.renderPretty(ribbonFrac: 1.0, pageWidth: pageWidth).displayString()
     }
 }
 
 extension Doc: Arbitrary {
     public static var arbitrary: Gen<Doc> {
-		let stringDocGen: Gen<Doc> = String.arbitrary.map{ Doc.text($0) }
-		let lineOrEmptyGen: Gen<Doc> = Gen<[Doc]>.fromElements(of: [ Doc.line, Doc.empty ])
-		return Gen<Doc>.frequency([
-		        (3, stringDocGen),
-		        (1, lineOrEmptyGen)
-		    ]).proliferate(withSize: 10)
-	          .map{ $0.cat() }
+        let stringDocGen: Gen<Doc> = String.arbitrary.map{ Doc.text($0) }
+        let lineOrEmptyGen: Gen<Doc> = Gen<Doc>.fromElements(of: [ Doc.line, Doc.empty ])
+        return Gen<Doc>.frequency([
+            (3, stringDocGen),
+            (1, lineOrEmptyGen)
+            ]).proliferate(withSize: 10)
+            .map{ $0.cat() }
     }
 }
 
@@ -67,7 +67,7 @@ class DocSpecs: XCTestCase {
         property("nesting single line is noop") <- forAll(posNum, posNum, String.arbitrary) { (x: Int, y: Int, str: String) in
             let xs = [x, y].sorted()
             let (nest, width) = (xs[0], xs[1])
-            let noNewlines = String(str.characters.filter { $0 != "\n" })
+            let noNewlines = String(str.filter { $0 != "\n" })
 
             return Doc.nest(nest, .text(noNewlines))
                 .equals(underPageWidth: width,
@@ -77,7 +77,7 @@ class DocSpecs: XCTestCase {
         property("group idempotent") <- forAll(posNum, Doc.arbitrary) { (width: Int, doc: Doc) in
             return doc.grouped
                 .equals(underPageWidth: width,
-	                    doc: doc.grouped.grouped)
+                        doc: doc.grouped.grouped)
         }
     }
 
@@ -85,3 +85,4 @@ class DocSpecs: XCTestCase {
         ("testSpecs", testSpecs)
     ]
 }
+

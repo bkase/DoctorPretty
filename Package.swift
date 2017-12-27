@@ -1,21 +1,16 @@
-// swift-tools-version:3.1
+// swift-tools-version:4.0
 
 import PackageDescription
-import Foundation
-
-// HACK from https://github.com/ReactiveCocoa/ReactiveSwift/blob/master/Package.swift
-var isSwiftPMTest: Bool {
-    return ProcessInfo.processInfo.environment["SWIFTPM_TEST_DoctorPretty"] == "YES"
-}
 
 let package = Package(
     name: "DoctorPretty",
-    targets: [],
     dependencies: [
-        .Package(url: "https://github.com/typelift/Algebra.git", majorVersion: 0, minor: 2),
-        .Package(url: "https://github.com/typelift/Swiftx.git", majorVersion: 0, minor: 5)
-    ] + (isSwiftPMTest ?
-      [.Package(url: "https://github.com/typelift/SwiftCheck.git", versions: Version(0,6,0)..<Version(1,0,0))] :
-      [])
-
+        .package(url: "https://github.com/typelift/Algebra.git", .exact("0.2.0")),
+        .package(url: "https://github.com/typelift/Swiftx.git", .exact("0.6.0")),
+        .package(url: "https://github.com/typelift/SwiftCheck.git", .exact("0.9.1"))
+    ],
+    targets: [
+        .target(name: "DoctorPretty", dependencies: ["Algebra", "Swiftx"]),
+        .testTarget(name: "DoctorPrettyTests", dependencies: ["DoctorPretty", "SwiftCheck"]),
+        ]
 )

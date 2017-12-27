@@ -11,12 +11,21 @@
         }
       },
       {
+        "package": "FileCheck",
+        "repositoryURL": "https://github.com/trill-lang/FileCheck.git",
+        "state": {
+          "branch": null,
+          "revision": "1c966580c83cf2e41be802992d46fe2edfc5c95f",
+          "version": "0.0.5"
+        }
+      },
+      {
         "package": "Operadics",
         "repositoryURL": "https://github.com/typelift/Operadics.git",
         "state": {
           "branch": null,
-          "revision": "bc8cdd83868c395b7075d0db5e930842172012ec",
-          "version": "0.2.3"
+          "revision": "c2a14919b3653a39a9bf268c1ae0bf71ad6833fe",
+          "version": "0.3.0"
         }
       },
       {
@@ -24,8 +33,8 @@
         "repositoryURL": "https://github.com/typelift/SwiftCheck.git",
         "state": {
           "branch": null,
-          "revision": "97a244b4c48e5823e82f50562fc4e32b3d6507a8",
-          "version": "0.8.0"
+          "revision": "df82fb889864945c64458f38846702af729b3ee4",
+          "version": "0.9.1"
         }
       },
       {
@@ -33,8 +42,8 @@
         "repositoryURL": "https://github.com/typelift/Swiftx.git",
         "state": {
           "branch": null,
-          "revision": "32cb9a833cbc69b1ee2ebad2392eca3090b7211c",
-          "version": "0.5.3"
+          "revision": "140f1510ecb8597970c58c5a41a32bda72310d31",
+          "version": "0.6.0"
         }
       }
     ]
