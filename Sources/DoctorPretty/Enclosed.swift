@@ -14,7 +14,7 @@ extension BidirectionalCollection where Iterator.Element == Doc, IndexDistance =
     /// Intersperses punctuation inside docs
     public func punctuate(with punctuation: Doc) -> [Doc] {
         if let d = first {
-            return [d] + self.dropLast().reduce(into: [Doc]()) { acc, d2 in
+            return [d] + self.dropFirst().reduce(into: [Doc]()) { acc, d2 in
                 acc.append(punctuation)
                 acc.append(d2)
             }
