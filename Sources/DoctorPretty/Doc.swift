@@ -35,7 +35,7 @@ public indirect enum Doc {
     }
     
     public static func text(_ str: String) -> Doc {
-        return str == "" ? .empty : ._text(length: str.characters.count, str)
+        return str == "" ? .empty : ._text(length: str.count, str)
     }
     
     public static var line: Doc {

@@ -9,5 +9,5 @@
 import Foundation
 
 public func spaces(_ i: Int) -> String {
-    return (0..<i).map{ _ in " " }.joined()
+    return String(repeating: " ", count: i)
 }
