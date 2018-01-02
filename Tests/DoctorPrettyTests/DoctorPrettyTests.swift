@@ -115,7 +115,7 @@ class DoctorPrettyTests: XCTestCase {
         let docBigger = .text("let x =") <%> list3
 
         assertPretty(
-            pageWidth: 20,
+            pageWidth: 20, /* If this is 15, the test passes, I think there is something wrong with the retry */
             str: ["let x = [",
                 "    [",
                 "        [",
