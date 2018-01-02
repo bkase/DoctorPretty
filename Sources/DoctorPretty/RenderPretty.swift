@@ -65,23 +65,35 @@ indirect enum Cont {
     case wrapLine(indent: Int, Cont)
     case checkFits(nesting: IndentLevel, column: ColumnCount, pageWidth: Width, ribbonWidth: RibbonWidth, shorterLines: Doc,             z: (IndentLevel, ColumnCount) -> SimpleDoc, indent: Int, rest: Docs, Cont)
     
-    func apply(_ doc: SimpleDoc) -> SimpleDoc {
-        switch self {
+    func apply(_ _doc: SimpleDoc) -> SimpleDoc {
+        var doc = _doc
+        var next = self
+
+        repeat {
+        switch next {
         case .ret:
             return doc
         case let .wrapChar(c, cont):
-            return cont.apply(SimpleDoc.char(c, doc))
+            doc = SimpleDoc.char(c, doc)
+            next = cont
+            continue
         case let .wrapText(length, text, cont):
-            return cont.apply(SimpleDoc.text(length: length, text, doc))
+            doc = SimpleDoc.text(length: length, text, doc)
+            next = cont
+            continue
         case let .wrapLine(indent, cont):
-            return cont.apply(SimpleDoc.line(indent: indent, doc))
+            doc = SimpleDoc.line(indent: indent, doc)
+            next = cont
+            continue
         case let .checkFits(nesting, column, pageWidth, ribbonWidth, shorterLines, z, indent, rest, cont):
             if doc.fits(nesting: nesting, column: column, pageWidth: pageWidth, ribbonWidth: ribbonWidth) {
-                return cont.apply(doc)
+                next = cont
+                continue
             } else {
                 return Doc.best(ribbonChars: ribbonWidth, pageWidth: pageWidth, currNesting: nesting, currColumn: column, z: z, indentationDocs: .Cons((indent, shorterLines), rest), k: cont)
             }
         }
+        } while (true)
     }
 }
 
@@ -95,17 +107,26 @@ extension Doc {
     }
     
     static func best(
-        ribbonChars: RibbonWidth,
-        pageWidth: Width,
-        currNesting: IndentLevel,
-        currColumn: ColumnCount,
+        ribbonChars _ribbonChars: RibbonWidth,
+        pageWidth _pageWidth: Width,
+        currNesting _currNesting: IndentLevel,
+        currColumn _currColumn: ColumnCount,
         // This parameter is only used during annotation, but I'm
         // keeping it here to simplify adding the annotation case
         // in doc if that ever happens
-        z: @escaping (IndentLevel, ColumnCount) -> SimpleDoc,
-        indentationDocs: Docs,
-        k: Cont
+        z _z: @escaping (IndentLevel, ColumnCount) -> SimpleDoc,
+        indentationDocs _indentationDocs: Docs,
+        k _k: Cont
     ) -> SimpleDoc {
+        var ribbonChars = _ribbonChars
+        var pageWidth = _pageWidth
+        var currNesting = _currNesting
+        var currColumn = _currColumn
+        var z = _z
+        var indentationDocs = _indentationDocs
+        var k = _k
+        
+        repeat {
         switch indentationDocs {
         case .Nil: return k.apply(z(currNesting, currColumn))
         case let .Cons(head, rest):
@@ -113,35 +134,53 @@ extension Doc {
             
             switch doc {
             case .empty:
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: rest, k: k)
+                indentationDocs = rest
+                continue
             case let ._char(c):
-                let newColumn = currColumn + 1
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: newColumn, z: z, indentationDocs: rest, k: Cont.wrapChar(c, k))
+                currColumn = currColumn + 1
+                k = .wrapChar(c, k)
+                indentationDocs = rest
+                continue
             case let ._text(length, str):
-                let newColumn = currColumn + length
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: newColumn, z: z, indentationDocs: rest, k: .wrapText(length: length, str, k))
+                currColumn = currColumn + length
+                k = .wrapText(length: length, str, k)
+                indentationDocs = rest
+                continue
             case ._line:
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: indent, currColumn: indent, z: z, indentationDocs: rest, k: .wrapLine(indent: indent, k))
+                currColumn = indent
+                currNesting = indent
+                k = .wrapLine(indent: indent, k)
+                indentationDocs = rest
+                continue
             case let .flatAlt(primary, whenFlattened: _):
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, primary), rest), k: k)
+                indentationDocs = .Cons((indent, primary), rest)
+                continue
             case let .concat(d1, d2):
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, d1), .Cons((indent, d2), rest)), k: k)
+                indentationDocs = .Cons((indent, d1), .Cons((indent, d2), rest))
+                continue
             case let .nest(indent_, d):
                 let newIndent = indent + indent_
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((newIndent, d), rest), k: k)
+                indentationDocs = .Cons((newIndent, d), rest)
+                continue
             case let .union(longerLines, shorterLines):
-                
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, longerLines), rest), k: .checkFits(nesting: currNesting, column: currColumn, pageWidth: pageWidth, ribbonWidth: ribbonChars, shorterLines: shorterLines, z: z, indent: indent, rest: rest, k))
+                indentationDocs = .Cons((indent, longerLines), rest)
+                k = .checkFits(nesting: currNesting, column: currColumn, pageWidth: pageWidth, ribbonWidth: ribbonChars, shorterLines: shorterLines, z: z, indent: indent, rest: rest, k)
+                continue
             case let .column(f):
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, f(currColumn)), rest), k: k)
+                indentationDocs = .Cons((indent, f(currColumn)), rest)
+                continue
             case let .nesting(f):
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, f(indent)), rest), k: k)
+                indentationDocs = .Cons((indent, f(indent)), rest)
+                continue
             case let .columns(f):
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, f(.some(pageWidth))), rest), k: k)
+                indentationDocs = .Cons((indent, f(.some(pageWidth))), rest)
+                continue
             case let .ribbon(f):
-                return best(ribbonChars: ribbonChars, pageWidth: pageWidth, currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, f(.some(ribbonChars))), rest), k: k)
+                indentationDocs = .Cons((indent, f(.some(ribbonChars))), rest)
+                continue
             }
         }
+        } while (true)
     }
     
     func renderFits(ribbonFrac: Float, pageWidth: Width) -> SimpleDoc {
