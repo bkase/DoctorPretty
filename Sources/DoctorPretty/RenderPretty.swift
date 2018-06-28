@@ -44,7 +44,7 @@ extension Doc {
             // This parameter is only used during annotation, but I'm
             // keeping it here to simplify adding the annotation case
             // in doc if that ever happens
-            z: (IndentLevel, ColumnCount) -> SimpleDoc,
+            z: @escaping (IndentLevel, ColumnCount) -> SimpleDoc,
             indentationDocs: Docs
         ) -> SimpleDoc {
             switch indentationDocs {
@@ -62,7 +62,7 @@ extension Doc {
                     let newColumn = currColumn + length
                     return SimpleDoc.text(length: length, str, best(currNesting: currNesting, currColumn: newColumn, z: z, indentationDocs: rest))
                 case ._line:
-                    return SimpleDoc.line(indent: indent, best(currNesting: indent, currColumn: indent, z: z, indentationDocs: rest))
+                    return SimpleDoc.line(indent: indent, { best(currNesting: indent, currColumn: indent, z: z, indentationDocs: rest) })
                 case let .flatAlt(primary, whenFlattened: _):
                     return best(currNesting: currNesting, currColumn: currColumn, z: z, indentationDocs: .Cons((indent, primary), rest))
                 case let .concat(d1, d2):

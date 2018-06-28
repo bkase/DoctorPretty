@@ -16,7 +16,7 @@ public indirect enum SimpleDoc {
     case empty
     case char(Character, SimpleDoc)
     case text(length: Int, String, SimpleDoc)
-    case line(indent: Int, SimpleDoc)
+    case line(indent: Int, () -> SimpleDoc)
     
     public func display<M: Additive>(readString: (String) -> M) -> M {
         switch self {
@@ -24,7 +24,7 @@ public indirect enum SimpleDoc {
         case let .char(c, rest): return readString(String(c)) <> rest.display(readString: readString)
         case let .text(_, s, rest): return readString(s) <> rest.display(readString: readString)
         case let .line(indent, rest):
-            return readString("\n" + spaces(indent)) <> rest.display(readString: readString)
+            return readString("\n" + spaces(indent)) <> rest().display(readString: readString)
         }
     }
     
