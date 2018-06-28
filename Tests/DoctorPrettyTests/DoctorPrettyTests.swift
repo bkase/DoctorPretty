@@ -4,6 +4,16 @@ import Operadics
 
 // Most tests ported from https://github.com/minad/wl-pprint-annotated/blob/master/test/WLPPrintTests.hs
 class DoctorPrettyTests: XCTestCase {
+    
+    func testSlow() {
+        measure {
+            let doc = (1...30).map { _ in
+                (1...30).map { _ in "foo" }.map(Doc.text).fillSep()
+                }.vcat()
+            _ = doc.renderPrettyDefault()
+        }
+    }
+    
     func assertPretty(pageWidth: Width, str: String, doc: Doc, file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(doc.renderPretty(ribbonFrac: 1.0, pageWidth: pageWidth).displayString(), str, file: file, line: line)
     }
